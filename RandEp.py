@@ -10,9 +10,14 @@ file.close()
 #searches for Tv show on TMDb
 def search():
     l = tmdb.Search()
-    title = str(input('Show Name: '))
-    m = l.tv(query=title)
-    seasonInfo(l.results[0]['id'])
+    while True:
+        title = str(input('Show Name: '))
+        m = l.tv(query=title)
+        try:
+            seasonInfo(l.results[0]['id'], l.results[0]['original_name'])
+            break
+        except IndexError as e:
+            print('Title not found')
 '''
     for x in l.results:
         try:
@@ -22,7 +27,7 @@ def search():
 '''
 
 #Collects dictionary with each season and the number of episodes in each
-def seasonInfo(id):
+def seasonInfo(id, title):
     dic = {}
     s = 1;
     while True:
@@ -34,14 +39,16 @@ def seasonInfo(id):
         except Exception as e:
             #print (e)
             break
-    randomEp(id, dic)
+    randomEp(id, dic, title)
 
-def randomEp(id, dic):
+#Gives a random episode
+def randomEp(id, dic, title):
     season = random.randint(1, len(dic))
+    #breaks if there's an empty season
     ep = random.randint(1, dic['Season {}'.format(season)])
     episodes = tmdb.TV_Seasons(id, season).info()['episodes']
-    print ('Season {}, Episode {}, {}'.format(season, ep+1, episodes[ep]['name']))
-    print (episodes[ep]['overview'])
+    print ('{}: Season {}, Episode {}, {}'.format(title, season, ep+1, episodes[ep-1]['name']))
+    print (episodes[ep-1]['overview'])
 '''
     for x in episodes:
         print (x['name'])
