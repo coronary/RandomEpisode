@@ -43,6 +43,7 @@ def randomEp(id, dic, title):
     ep = random.randint(1, dic['Season {}'.format(season)])
     episodes = tmdb.TV_Seasons(id, season).info()['episodes']
     print ('{}: Season {}, Episode {}, {}'.format(title, season, ep, episodes[ep-1]['name']))
+    #Prints a 'b' in front of overview for some reason. Not part of the overview string
     print (episodes[ep-1]['overview'].encode('utf-8'))
 
 
