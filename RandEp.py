@@ -18,13 +18,7 @@ def search():
             break
         except IndexError as e:
             print('Title not found')
-'''
-    for x in l.results:
-        try:
-            print (x['original_name'])
-        except Exception as error:
-            print (error)
-'''
+
 
 #Collects dictionary with each season and the number of episodes in each
 def seasonInfo(id, title):
@@ -34,7 +28,9 @@ def seasonInfo(id, title):
         try:
             season = tmdb.TV_Seasons(id, s).info()
             eps = len(season['episodes'])
-            dic['Season {}'.format(s)] = eps
+            #Only adds seasons with episodes
+            if eps > 0:
+                dic['Season {}'.format(s)] = eps
             s += 1
         except Exception as e:
             #print (e)
@@ -44,14 +40,10 @@ def seasonInfo(id, title):
 #Gives a random episode
 def randomEp(id, dic, title):
     season = random.randint(1, len(dic))
-    #breaks if there's an empty season
     ep = random.randint(1, dic['Season {}'.format(season)])
     episodes = tmdb.TV_Seasons(id, season).info()['episodes']
-    print ('{}: Season {}, Episode {}, {}'.format(title, season, ep+1, episodes[ep-1]['name']))
-    print (episodes[ep-1]['overview'])
-'''
-    for x in episodes:
-        print (x['name'])
-'''
+    print ('{}: Season {}, Episode {}, {}'.format(title, season, ep, episodes[ep-1]['name']))
+    print (episodes[ep-1]['overview'].encode('utf-8'))
+
 
 search()
